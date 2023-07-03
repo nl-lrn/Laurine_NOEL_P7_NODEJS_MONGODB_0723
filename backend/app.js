@@ -11,34 +11,251 @@ app.use((req, res, next) => {
     next();
   });
 
-
-app.post('/api/stuff', (req, res, next) => {
+app.post('/api/book', (req, res, next) => {
     console.log(req.body);
     res.status(201).json({
-        message:'objet créer'
+        message: "objet créer"
     });
 });
 
-app.get('/api/stuff', (req, res, next) => {
-    const stuff = [
+app.get('/api/book', (req, res, next) => {
+    const book = [
       {
-        _id: 'oeihfzeoi',
-        title: 'Mon premier objet',
-        description: 'Les infos de mon premier objet',
-        imageUrl: 'https://cdn.pixabay.com/photo/2019/06/11/18/56/camera-4267692_1280.jpg',
-        price: 4900,
-        userId: 'qsomihvqios',
+      "id": "1",
+      "userId" : "clc4wj5lh3gyi0ak4eq4n8syr",
+      "title" : "Milwaukee Mission",
+      "author": "Elder Cooper",
+      "imageUrl" : "https://via.placeholder.com/206x260",
+      "year" : 2021,
+      "genre" : "Policier",
+      "ratings" : [{
+        "userId" : "1",
+        "grade": 5
+      },
+        {
+          "userId" : "1",
+          "grade": 5
+        },
+        {
+          "userId" : "clc4wj5lh3gyi0ak4eq4n8syr",
+          "grade": 5
+        },
+        {
+          "userId" : "1",
+          "grade": 5
+        }],
+      "averageRating": 3
+    },
+      {
+        "id": "2",
+        "userId" : "clbxs3tag6jkr0biul4trzbrv",
+        "title" : "Book for Esther",
+        "author": "Alabaster",
+        "imageUrl" : "https://via.placeholder.com/206x260",
+        "year" : 2022,
+        "genre" : "Paysage",
+        "ratings" : [{
+          "userId" : "clbxs3tag6jkr0biul4trzbrv",
+          "grade": 4
+        },
+          {
+            "userId" : "1",
+            "grade": 5
+          },
+          {
+            "userId" : "1",
+            "grade": 5
+          },
+          {
+            "userId" : "1",
+            "grade": 5
+          }],
+        "averageRating": 4.2
       },
       {
-        _id: 'oeihfzeomoihi',
-        title: 'Mon deuxième objet',
-        description: 'Les infos de mon deuxième objet',
-        imageUrl: 'https://cdn.pixabay.com/photo/2019/06/11/18/56/camera-4267692_1280.jpg',
-        price: 2900,
-        userId: 'qsomihvqios',
+        "id": "3",
+        "userId" : "1",
+        "title" : "The Kinfolk Table",
+        "author": "Nathan Williams",
+        "imageUrl" : "https://via.placeholder.com/206x260",
+        "year" : 2022,
+        "genre" : "Cuisine",
+        "ratings" : [{
+          "userId" : "1",
+          "grade": 5
+        },
+          {
+            "userId" : "1",
+            "grade": 5
+          },
+          {
+            "userId" : "1",
+            "grade": 5
+          },
+          {
+            "userId" : "1",
+            "grade": 5
+          }],
+        "averageRating": 3
       },
+      {
+        "id": "4",
+        "userId" : "1",
+        "title" : "Milwaukee Mission",
+        "author": "Elder Cooper",
+        "imageUrl" : "https://via.placeholder.com/206x260",
+        "year" : 2021,
+        "genre" : "Policier",
+        "ratings" : [{
+          "userId" : "1",
+          "grade": 5
+        },
+          {
+            "userId" : "1",
+            "grade": 5
+          },
+          {
+            "userId" : "1",
+            "grade": 5
+          },
+          {
+            "userId" : "1",
+            "grade": 5
+          }],
+        "averageRating": 3
+      },
+      {
+        "id": "5",
+        "userId" : "1",
+        "title" : "Book for Esther",
+        "author": "Alabaster",
+        "imageUrl" : "https://via.placeholder.com/206x260",
+        "year" : 2022,
+        "genre" : "Paysage",
+        "ratings" : [{
+          "userId" : "1",
+          "grade": 5
+        },
+          {
+            "userId" : "1",
+            "grade": 5
+          },
+          {
+            "userId" : "1",
+            "grade": 5
+          },
+          {
+            "userId" : "1",
+            "grade": 5
+          }],
+        "averageRating": 4
+      },
+      {
+        "id": "6",
+        "userId" : "1",
+        "title" : "The Kinfolk Table",
+        "author": "Nathan Williams",
+        "imageUrl" : "https://via.placeholder.com/206x260",
+        "year" : 2022,
+        "genre" : "Cuisine",
+        "ratings" : [{
+          "userId" : "1",
+          "grade": 5
+        },
+          {
+            "userId" : "1",
+            "grade": 5
+          },
+          {
+            "userId" : "1",
+            "grade": 5
+          },
+          {
+            "userId" : "1",
+            "grade": 5
+          }],
+        "averageRating": 3
+      },
+      {
+        "id": "7",
+        "userId" : "1",
+        "title" : "Milwaukee Mission",
+        "author": "Elder Cooper",
+        "imageUrl" : "https://via.placeholder.com/206x260",
+        "year" : 2021,
+        "genre" : "Policier",
+        "ratings" : [{
+          "userId" : "1",
+          "grade": 5
+        },
+          {
+            "userId" : "1",
+            "grade": 5
+          },
+          {
+            "userId" : "1",
+            "grade": 5
+          },
+          {
+            "userId" : "1",
+            "grade": 5
+          }],
+        "averageRating": 3
+      },
+      {
+        "id": "8",
+        "userId" : "clc7s9xnh7zpt0ak4fisdwuj1",
+        "title" : "Book for Esther",
+        "author": "Alabaster",
+        "imageUrl" : "https://via.placeholder.com/206x260",
+        "year" : 2022,
+        "genre" : "Paysage",
+        "ratings" : [{
+          "userId" : "1",
+          "grade": 5
+        },
+          {
+            "userId" : "1",
+            "grade": 5
+          },
+          {
+            "userId" : "1",
+            "grade": 5
+          },
+          {
+            "userId" : "1",
+            "grade": 5
+          }],
+        "averageRating": 4
+      },
+      {
+        "id": "9",
+        "userId" : "clc4wj5lh3gyi0ak4eq4n8syr",
+        "title" : "The Kinfolk Table",
+        "author": "Nathan Williams",
+        "imageUrl" : "https://via.placeholder.com/206x260",
+        "year" : 2022,
+        "genre" : "Cuisine",
+        "ratings" : [{
+          "userId" : "1",
+          "grade": 5
+        },
+          {
+            "userId" : "1",
+            "grade": 5
+          },
+          {
+            "userId" : "1",
+            "grade": 5
+          },
+          {
+            "userId" : "clc4wj5lh3gyi0ak4eq4n8syr",
+            "grade": 1
+          }],
+        "averageRating": 3
+      }
     ];
-    res.status(200).json(stuff);
+    res.status(200).json(book);
   });
 
 module.exports = app;
