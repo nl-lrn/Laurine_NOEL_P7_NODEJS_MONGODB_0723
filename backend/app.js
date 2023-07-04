@@ -1,6 +1,8 @@
 const express = require('express');
 
-const Book = require('./models/Book');
+const bookRoutes = require('./routes/book');
+const userRoutes = require('./routes/user');
+const path = require('path');
 
 const mongoose = require('mongoose');
 mongoose.connect('mongodb+srv://nl_lrn:V8g6dGDVznEMFScy@cluster0.g13do3d.mongodb.net/?retryWrites=true&w=majority',
@@ -13,44 +15,14 @@ const app = express();
 app.use(express.json());
 
 app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
-    next();
-  });
-
-app.post('/api/book', (req, res, next) => {
-    delete req.body._id;
-    const book = new Book({
-      ...req.body
-    });
-    book.save()
-      .then(() => res.status(201).json({ message: 'Votre livre a bien été enregistré !'}))
-      .catch(error => res.status(400).json({error}));
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+  next();
 });
 
-app.put('/api/book/:id', (req, res, next) => {
-  Book.updateOne({_id: req.params.id}, {...req.body, _id: req.params.id})
-  .then(() => res.status(200).json({ message: 'Le livre a bien été modifié.'}))
-  .catch(error => res.status(400).json({error}));
-});
-
-app.delete('/api/book/:id', (req, res, next) => {
-  Book.deleteOne({_id: req.params.id})
-    .then(() => res.status(200).json({ message: 'Le livre a bien été supprimé.'}))
-    .catch(error => res.status(400).json({error}));
-});
-
-app.get('/api/book/:id', (req, res, next) => {
-  Book.findOne({_id: req.params.id})
-    .then(book => res.status(200).json(book))
-    .catch(error => res.status(404).json({error}));
-});
-
-app.get('/api/book', (req, res, next) => {
-    Book.find()
-      .then(books => res.status(200).json(books))
-      .catch(error => res.status(400).json({error}));
-  });
+app.use('/api/book', bookRoutes);
+app.use('/api/auth', userRoutes);
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 module.exports = app;
