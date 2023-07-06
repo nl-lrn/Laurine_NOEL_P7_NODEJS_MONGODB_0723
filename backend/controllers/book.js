@@ -76,3 +76,7 @@ exports.getAllBooks = (req, res, next) => {
       .then(books => res.status(200).json(books))
       .catch(error => res.status(400).json({error}));
 };
+
+// exports.bestRating = (req, res, ,next) => {
+
+// };
