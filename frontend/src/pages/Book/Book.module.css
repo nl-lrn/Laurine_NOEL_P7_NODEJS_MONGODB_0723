@@ -65,9 +65,6 @@
     flex-direction: column;
 }
 
-.Owner {
-
-}
 .BookInfo {
     display: grid;
     width: 100%;
