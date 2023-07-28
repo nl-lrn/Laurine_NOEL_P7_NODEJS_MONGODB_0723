@@ -5,6 +5,7 @@ exports.createBook = (req, res, next) => {
     const bookObject = JSON.parse(req.body.book);
     delete bookObject._id;
     delete bookObject._userId;
+
     const book = new Book({
       ...bookObject,
       userId: req.auth.userId,
@@ -64,27 +65,6 @@ exports.getAllBooks = (req, res, next) => {
       .catch(error => res.status(400).json({error}));
 };
 
-// exports.addRating = (req, res, next) => {
-//   const { userId, rating } = req.body;
-
-//   Book.findById(req.params.id)
-//     .then(book => {
-//       // permet de vérifier si l'utilisateur a déjà noté le livre
-//       const alreadyRated = book.ratings.find(rating => rating.userId === userId);
-//       if (alreadyRated) {
-//         return res.status(401).json({ message: "Vous avez déjà attribué une note à ce livre." });
-//       }
-//       // permet d'ajouter la nouvelle notation à la liste des évaluations du livre
-//       const newRating = { userId, grade: rating };
-//       book.ratings.push(newRating);
-//       // permet de mettre à jour le livre dans la base de données avec la nouvelle notation
-//       Book.findByIdAndUpdate(req.params.id, { ratings: book.ratings }, { new: true })
-//         .then(updatedBook => res.status(201).json({ message: 'Votre note a bien été enregistrée !', book: updatedBook }))
-//         .catch(error => res.status(400).json({ error }));
-//     })
-//     .catch(error => res.status(400).json({ error }));
-// };
-
 exports.addRating = (req, res, next) => {
   const { userId, rating } = req.body;
 
@@ -110,53 +90,25 @@ exports.addRating = (req, res, next) => {
       book.averageRating = roundedAverageRating;
 
       // Sauvegarde le livre mis à jour
-      return book.save();
-    })
-    .then(updatedBook => {
-      // Récupère le livre mis à jour avec les informations complètes en effectuant une deuxième requête
-      return Book.findById(updatedBook._id);
-    })
-    .then(finalUpdatedBook => {
-      // Réponse JSON avec la nouvelle note, la note moyenne mise à jour et le livre complet
-      const response = {
-        message: 'Votre note a bien été enregistrée !',
-        newRating: { userId, grade: rating }, // Nouvelle note
-        averageRating: finalUpdatedBook.averageRating, // Note moyenne mise à jour
-        book: finalUpdatedBook // Livre complet mis à jour
-      };
-
-      res.status(201).json(response);
+      book.save()
+      .then(() => {
+        // Renvoi du livre mis à jour dans la réponse
+        res.status(200).json(book);
+      })
     })
     .catch(error => res.status(400).json({ error }));
 };
 
-
-// exports.postRating = (req, res, next) => {
-//   const newRating = { ...req.body };
-//   newRating.grade = newRating.rating;
-//   delete newRating.rating;
-//   Book.findOne({ _id: req.params.id })
-//     .then((book) => {
-//       const cloneBook = { ...book._doc };
-//       cloneBook.ratings.push(newRating); // Ajouter la nouvelle note à la fin du tableau
-//       function calcAverageGrade(arr) {
-//         let avr = Math.round((arr.reduce((acc, elem) => acc + elem.grade, 0) / arr.length) * 100) / 100;
-//         return avr;
-//       };
-//       cloneBook.averageRating = calcAverageGrade(cloneBook.ratings);
-//       Book.updateOne(
-//         { _id: req.params.id },
-//         { ...cloneBook }
-//       )
-//         .then(() => {
-//           res.status(200).json(cloneBook);
-//         })
-//         .catch((err) => {
-//           res.status(401).json({ err });
-//         });
-//     })
-//     .catch((error) => {
-//       res.status(400).json({ error });
-//     });
-// }; 
-
+// fonction bestRating, afin de récupérer les 3 meilleurs livres notés
+exports.bestRating = (req, res, next) => {
+  // on utilise la méthode find() de Mongoose qui récupère tout les livres présents dans la collection
+  Book.find()
+    // permet de trier les livres en fonction de leurs notes de façon décroissante 
+    .sort({averageRating: -1})
+    // permet de limiter le nombre de livres à 3
+    .limit(3)
+    // reponse de la requête qui renvoit les 3 livres les mieux notés
+    .then(bestRatedBook => res.status(200).json(bestRatedBook))
+    // renvoit une erreur s'il y a un problème
+    .catch(error => res.status(400).json({error}))
+};
