@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 
-// création d'un schéma de données qui contient les champs souhaités pour chaque 'Book', et leur type ainsi que leur caractère (obligatoire ou non)
+// création d'un schéma de données qui contient les champs souhaités pour chaque 'Book', et leurs types ainsi que leurs caractères (obligatoire ou non)
 const bookSchema = mongoose.Schema({
     userId : {type: String, required: true},
     title: {type: String, required: true, unique: true},
@@ -19,6 +19,7 @@ const bookSchema = mongoose.Schema({
     averageRating: {type: Number, default: 0}
 });
 
+// permet de garantir que certaines données soient uniques dans la collection MongoDB
 bookSchema.plugin(uniqueValidator);
 
 // exportation du schéma en tant que modèle Mongoose appelé 'Book', le rendant disponible pour notre application Express

@@ -1,45 +1,43 @@
-// const sharp = require('sharp');
-
-// sharp("file.jpg")
-//     .webp()
-//     .toFile("new-file.webp")
-//     .then(function(info) {
-//         console.log(info)
-//     })
-//     .catch(function(err) {
-//         console.log(err)
-//     });
-
-// module.exports = sharp();
-
+// importation de sharp
 const sharp = require('sharp');
+// importation du système des chemins des fichiers
 const path = require('path');
 const fs = require('fs');
 
+// fonction pour optimiser les images
 const optimizeImage = (req, res, next) => {
+  // vérification s'il y a une image ou non
   if (!req.file) {
-    return next(); // Pas d'image à traiter, passe au middleware suivant.
+    return next();
   }
-
+  // vérification des informations de l'image téléchargée
   const { filename, path: imagePath } = req.file;
-  const optimizedImagePath = path.join(path.dirname(imagePath), 'optimized', filename);
-
+  // création du chemin vers l'endroit où sera stocké la nouvelle image optimisée
+  const optimizedImagePath = path.join(path.dirname(imagePath), filename);
+  
   sharp(imagePath)
-    .resize(800) // Redimensionne l'image à une largeur de 800 pixels (vous pouvez ajuster cette valeur selon vos besoins).
-    .toFile(optimizedImagePath, (err, info) => {
+  // permet de redimensionner les images uploader par les utilisateurs
+  .resize(600)
+  // permet le changement de format des images uploader par les utilisateurs
+  .toFormat('webp')
+  // enregistrement du chemin de la nouvelle image optimisée
+  .toFile(optimizedImagePath, (err, info) => {
+    if (err) {
+      // En cas d'erreur lors de l'optimisation de l'image
+      console.error(err);
+      return next();
+    }
+    // Supprime l'ancienne image non optimisée après avoir créé la version optimisée
+    fs.unlink(imagePath, (err) => {
       if (err) {
-        // En cas d'erreur lors de l'optimisation de l'image, appelez next() pour poursuivre le flux de traitement.
         console.error(err);
-        return next();
       }
-
-      // Supprimez l'ancienne image non optimisée après avoir créé la version optimisée.
-      fs.unlink(imagePath, (err) => {
-        if (err) {
-          console.error(err);
-        }
-        req.file.path = optimizedImagePath; // Mettez à jour le chemin de l'image dans la requête avec le chemin de l'image optimisée.
-        next();
+      // stockage du chemin de la nouvelle image optimisée
+      req.file.path = optimizedImagePath;
+      // envoie de l'image optimisée en réponse
+      res.sendFile(optimizedImagePath);
+      // passage au prochain middleware
+      next();
       });
     });
 };
