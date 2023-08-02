@@ -17,9 +17,7 @@ const optimizeImage = (req, res, next) => {
   
   sharp(imagePath)
   // permet de redimensionner les images uploader par les utilisateurs
-  .resize(600)
-  // permet le changement de format des images uploader par les utilisateurs
-  .toFormat('webp')
+  .resize(200)
   // enregistrement du chemin de la nouvelle image optimisée
   .toFile(optimizedImagePath, (err, info) => {
     if (err) {
